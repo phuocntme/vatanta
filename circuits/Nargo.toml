@@ -1,0 +1,3 @@
+[workspace]
+members = ["lib", "transfer", "split", "withdraw"]
+default-member = "transfer"

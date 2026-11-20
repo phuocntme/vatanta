@@ -1,0 +1,75 @@
+name: ci
+on: [push, pull_request]
+
+env:
+  NARGO_VERSION: v1.0.0
+  BB_VERSION: v6.0.0
+  AVALANCHE_CLI_VERSION: v1.9.7
+
+jobs:
+  circuits:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: nargo
+        run: |
+          mkdir -p ~/.local/toolchain/nargo
+          curl -sSL https://github.com/noir-lang/noir/releases/download/$NARGO_VERSION/noir-x86_64-unknown-linux-gnu.tar.gz | tar xz -C ~/.local/toolchain/nargo
+      - run: ~/.local/toolchain/nargo/nargo test --workspace --program-dir circuits
+
+  contracts:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with: { submodules: recursive }
+      - uses: foundry-rs/foundry-toolchain@v1
+        with: { version: v1.8.3 }
+      - run: cd contracts && FOUNDRY_PROFILE=ci forge test
+
+  sdk:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: cd sdk && npx vitest run && npx tsc --noEmit
+      - run: cd apps/web && npx tsc --noEmit
+
+  rust:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cd services && cargo test
+
+  e2e:
+    runs-on: ubuntu-24.04
+    needs: [circuits, contracts, sdk, rust]
+    services:
+      postgres:
+        image: postgres:16
+        env: { POSTGRES_USER: runner, POSTGRES_HOST_AUTH_METHOD: trust }
+        ports: ["5432:5432"]
+    env:
+      INDEXER_DATABASE_URL: postgres://runner@localhost/vatanta_indexer
+      RELAYER_DATABASE_URL: postgres://runner@localhost/vatanta_relayer
+      PGHOST: localhost
+      PGUSER: runner
+    steps:
+      - uses: actions/checkout@v4
+        with: { submodules: recursive }
+      - uses: foundry-rs/foundry-toolchain@v1
+        with: { version: v1.8.3 }
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: pnpm }
+      - name: avalanche-cli
+        run: |
+          mkdir -p ~/.local/toolchain/avalanche
+          curl -sSL https://github.com/ava-labs/avalanche-cli/releases/download/$AVALANCHE_CLI_VERSION/avalanche-cli_${AVALANCHE_CLI_VERSION#v}_linux_amd64.tar.gz | tar xz -C ~/.local/toolchain/avalanche
+      - run: sudo apt-get install -y postgresql-client
+      - run: pnpm install --frozen-lockfile
+      - run: E2E_CLEAN=1 pnpm e2e

@@ -1,0 +1,14 @@
+**/node_modules
+**/.next
+**/.turbo
+services/target
+contracts/out
+contracts/cache
+contracts/broadcast
+contracts/lib
+circuits/target
+.run
+.git
+**/.env
+**/.env.local
+l1/.local.env

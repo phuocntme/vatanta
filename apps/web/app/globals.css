@@ -1,0 +1,31 @@
+:root {
+  --red: #ef3340;
+  --deep: #8f1725;
+  --bg: #09090b;
+  --surface: #171719;
+  --border: #29292d;
+  --text: #fafafa;
+  --muted: #a1a1aa;
+  --on-red: #09090b;
+  color-scheme: dark;
+}
+/* No global border-box: components use content-box and set border-box per element. */
+html, body { margin: 0; background: var(--bg); color: var(--text); }
+body { font-family: var(--font-sans), "IBM Plex Sans", system-ui, sans-serif; font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+a { color: var(--text); }
+a:hover { color: var(--red); }
+button { font: inherit; }
+button:disabled { opacity: 0.55; cursor: not-allowed !important; }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+input::placeholder { color: #52525b; }
+.mono { font-family: var(--font-mono), "IBM Plex Mono", ui-monospace, monospace; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+.pulse { animation: pulse 1.4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .pulse { animation: none; } }
+
+.menu-item:hover { background: #1E1E21 !important; }
+.action-idle:hover { border-color: #71717A !important; color: #FAFAFA !important; }
+.action-current:hover { color: #09090B !important; }
+
+/* Privy modal: heavier button labels (e.g. "Sign and unlock") */
+#privy-modal-content button { font-weight: 600; }

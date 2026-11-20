@@ -1,0 +1,12 @@
+packages:
+  - sdk
+  - apps/*
+  - e2e
+allowBuilds:
+  esbuild: true
+  msgpackr-extract: true
+  # optional native addons / postinstall hooks pulled in by Privy's wallet stack; JS fallbacks are used
+  '@reown/appkit': false
+  bufferutil: false
+  keccak: false
+  utf-8-validate: false

@@ -1,0 +1,10 @@
+{
+  "name": "@vatanta/agent-demo",
+  "private": true,
+  "license": "MIT",
+  "author": "phuocntme",
+  "type": "module",
+  "scripts": { "start": "tsx src/agent.ts", "typecheck": "tsc --noEmit" },
+  "dependencies": { "@vatanta/sdk": "workspace:*", "@vatanta/e2e": "workspace:*", "viem": "2.57.13" },
+  "devDependencies": { "@types/node": "26.6.6", "tsx": "4.23.15", "typescript": "6.0.3" }
+}

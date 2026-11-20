@@ -1,0 +1,27 @@
+[package]
+name = "vatanta-indexer"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "vatanta-indexer"
+path = "src/main.rs"
+
+[dependencies]
+alloy.workspace = true
+anyhow.workspace = true
+axum.workspace = true
+hex.workspace = true
+reqwest.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sqlx.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tower-http.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+vatanta-common.workspace = true

@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1080" viewBox="0 0 1600 1080" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>Vatanta architecture: who uses it, the public chains and the private Avalanche L1</title>
+  <defs>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a8a93"/></marker>
+    <marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ef3340"/></marker>
+    <marker id="gr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2fbf71"/></marker>
+    <style>
+      .panel{fill:#18181b;stroke:#27272a;stroke-width:1.5}
+      .box{fill:#1f1f23;stroke:#34343a;stroke-width:1.5}
+      .hot{fill:#1f1f23;stroke:#7f1d26;stroke-width:1.5}
+      .cap{font-size:15px;letter-spacing:3px;fill:#a1a1aa}
+      .capr{font-size:15px;letter-spacing:3px;fill:#ef3340}
+      .t{font-size:19px;font-weight:700;fill:#fafafa}
+      .s{font-size:15px;fill:#c4c4cc}
+      .m{font-size:15px;fill:#c4c4cc;font-family:'SFMono-Regular',Menlo,Consolas,monospace}
+      .mu{font-size:15px;fill:#a1a1aa}
+      .w{font-size:15px;fill:#fafafa}
+      .lbl{font-size:13px;fill:#a1a1aa}
+      .lblr{font-size:13px;fill:#ef3340}
+      .lblg{font-size:13px;fill:#2fbf71}
+      .wire{fill:none;stroke:#8a8a93;stroke-width:1.6}
+      .wirer{fill:none;stroke:#ef3340;stroke-width:2}
+      .wireg{fill:none;stroke:#2fbf71;stroke-width:1.8;stroke-dasharray:6 5}
+      .dash{fill:none;stroke:#8a8a93;stroke-width:1.4;stroke-dasharray:5 5}
+    </style>
+  </defs>
+
+  <rect x="10" y="10" width="1580" height="1060" rx="18" fill="#111113" stroke="#222226"/>
+
+  <!-- ───────── top band: who uses it → proof on device → off-chain services ───────── -->
+  <rect class="panel" x="40" y="40" width="420" height="150" rx="12"/>
+  <text class="cap" x="64" y="72">WHO USES IT</text>
+  <rect class="box" x="64" y="92" width="116" height="76" rx="8"/>
+  <text class="w" x="78" y="124" font-weight="700">Web app</text><text class="lbl" x="78" y="148">apps/web</text>
+  <rect class="box" x="192" y="92" width="116" height="76" rx="8"/>
+  <text class="w" x="206" y="124" font-weight="700">Wallets</text><text class="lbl" x="206" y="148">TypeScript SDK</text>
+  <rect class="box" x="320" y="92" width="116" height="76" rx="8"/>
+  <text class="w" x="334" y="124" font-weight="700">AI agents</text><text class="lbl" x="334" y="148">HTTP 402 API</text>
+
+  <path class="wire" d="M462,115 L496,115" marker-end="url(#g)"/>
+  <rect x="500" y="56" width="320" height="118" rx="12" fill="#2a0d12" stroke="#ef3340" stroke-width="1.6"/>
+  <text class="t" x="524" y="96">Proof made on the</text>
+  <text class="t" x="524" y="122">user's device</text>
+  <text class="s" x="524" y="152">keys and notes never leave it</text>
+  <path class="wire" d="M822,115 L856,115" marker-end="url(#g)"/>
+
+  <rect class="panel" x="860" y="40" width="700" height="150" rx="12"/>
+  <text class="cap" x="884" y="72">OFF-CHAIN SERVICES · ANYONE CAN RUN THEM</text>
+  <rect class="box" x="884" y="92" width="210" height="76" rx="8"/>
+  <text class="w" x="900" y="124" font-weight="700">Relayer</text><text class="lbl" x="900" y="148">pays gas · paid per use</text>
+  <rect class="box" x="1108" y="92" width="210" height="76" rx="8"/>
+  <text class="w" x="1124" y="124" font-weight="700">Indexer</text><text class="lbl" x="1124" y="148">fast sync · roots checked</text>
+  <rect class="box" x="1332" y="92" width="210" height="76" rx="8"/>
+  <text class="w" x="1348" y="124" font-weight="700">icm-relayer</text><text class="lbl" x="1348" y="148">carries ICM messages</text>
+
+  <!-- ───────── left: C-Chain, public (deposit) ───────── -->
+  <rect class="panel" x="40" y="230" width="380" height="820" rx="12"/>
+  <text class="cap" x="64" y="268">C-CHAIN · PUBLIC</text>
+
+  <rect class="box" x="64" y="300" width="332" height="96" rx="8"/>
+  <text class="t" x="88" y="338">Deposit address</text>
+  <text class="m" x="88" y="368">20 USDC from an exchange</text>
+  <path class="wire" d="M230,398 L230,428" marker-end="url(#g)"/>
+
+  <rect class="box" x="64" y="432" width="332" height="110" rx="8"/>
+  <text class="t" x="88" y="470">DepositRouter</text>
+  <text class="s" x="88" y="498">takes 0.25 %, splits into</text>
+  <text class="s" x="88" y="522">10 · 100 · 1,000 · 10,000 pieces</text>
+  <path class="wire" d="M230,544 L230,574" marker-end="url(#g)"/>
+
+  <rect class="box" x="64" y="578" width="332" height="96" rx="8"/>
+  <text class="t" x="88" y="616">ICTT TokenHome</text>
+  <text class="s" x="88" y="646">holds the real USDC</text>
+
+  <rect class="box" x="64" y="714" width="332" height="110" rx="8"/>
+  <text class="t" x="88" y="752">DestinationRegistry</text>
+  <text class="s" x="88" y="780">open list of the L1s a piece</text>
+  <text class="s" x="88" y="804">can be withdrawn to</text>
+
+  <text class="mu" x="64" y="940">Outsiders see:</text>
+  <text class="w" x="64" y="968">who deposited, how much,</text>
+  <text class="w" x="64" y="994">and when.</text>
+
+  <!-- ───────── middle: the private L1 ───────── -->
+  <rect x="460" y="230" width="720" height="820" rx="12" fill="#0c0c0e" stroke="#ef3340" stroke-width="1.6" stroke-dasharray="8 6"/>
+  <text class="capr" x="488" y="268">AVALANCHE L1 · PRIVATE ZONE</text>
+
+  <rect class="box" x="488" y="300" width="200" height="96" rx="8"/>
+  <text class="t" x="508" y="338">TokenRemote</text>
+  <text class="s" x="508" y="368">bridged USDC (ICTT)</text>
+  <path class="wire" d="M690,348 L712,348" marker-end="url(#g)"/>
+
+  <rect class="box" x="716" y="300" width="440" height="140" rx="8"/>
+  <text class="t" x="740" y="338">ShieldedPool · Merkle tree</text>
+  <text class="s" x="740" y="368">every amount is a note; the chain</text>
+  <text class="s" x="740" y="392">stores only a commitment =</text>
+  <text class="m" x="740" y="418">H(amount, owner, blinding)</text>
+
+  <rect class="hot" x="488" y="480" width="170" height="110" rx="8"/>
+  <text class="t" x="508" y="516">Alice</text>
+  <rect x="508" y="544" width="130" height="18" fill="#000"/><rect x="508" y="544" width="5" height="18" fill="#ef3340"/><rect x="633" y="544" width="5" height="18" fill="#ef3340"/>
+  <path class="wirer" d="M660,535 L736,535" marker-end="url(#r)"/>
+  <text class="lblr" x="676" y="524">send</text>
+  <rect class="hot" x="740" y="480" width="170" height="110" rx="8"/>
+  <text class="t" x="760" y="516">Bob</text>
+  <rect x="760" y="544" width="130" height="18" fill="#000"/><rect x="760" y="544" width="5" height="18" fill="#ef3340"/><rect x="885" y="544" width="5" height="18" fill="#ef3340"/>
+
+  <text class="mu" x="944" y="500">On-chain only:</text>
+  <text class="m" x="944" y="528">nullifier</text>
+  <text class="m" x="944" y="554">commitment</text>
+  <text class="m" x="944" y="580">ciphertext</text>
+  <text class="m" x="944" y="606">ZK proof</text>
+
+  <path class="wirer" d="M573,592 L573,646" marker-end="url(#r)"/>
+  <text class="lblr" x="586" y="626">split</text>
+  <rect class="hot" x="488" y="650" width="440" height="96" rx="8"/>
+  <text class="t" x="512" y="688">Withdrawal piece · 10 USDC</text>
+  <text class="s" x="512" y="718">waits for a random batch, then leaves</text>
+
+  <rect class="box" x="488" y="790" width="668" height="76" rx="8"/>
+  <text class="w" x="512" y="822" font-weight="700">VerifierRegistry</text>
+  <text class="s" x="512" y="848">3 UltraHonk verifiers check every proof on-chain: send, split, withdraw</text>
+
+  <text class="mu" x="488" y="960">Outsiders, validators included, see: a transaction happened.</text>
+  <text class="w" x="488" y="988">Not who paid, who was paid, or how much.</text>
+
+  <!-- ───────── right: where pieces land (public) ───────── -->
+  <rect class="panel" x="1220" y="230" width="340" height="820" rx="12"/>
+  <text class="cap" x="1244" y="268">WITHDRAW TO · PUBLIC</text>
+
+
+  <rect class="box" x="1244" y="440" width="292" height="110" rx="8"/>
+  <text class="t" x="1264" y="478">C-Chain</text>
+  <text class="s" x="1264" y="506">fresh address 0xF8b7…</text>
+  <text class="m" x="1264" y="532">9.975 USDC</text>
+
+  <rect x="1244" y="600" width="292" height="130" rx="8" fill="#0f2a20" stroke="#2fbf71" stroke-width="1.6"/>
+  <text class="t" x="1264" y="638">Any Avalanche L1</text>
+  <text class="s" x="1264" y="666">fresh address 0x1d98…</text>
+  <text class="m" x="1264" y="692">9.975 USDC</text>
+  <text class="lblg" x="1264" y="716">multi-hop through C-Chain</text>
+
+  <text class="mu" x="1244" y="940">Outsiders see:</text>
+  <text class="w" x="1244" y="968">a fresh address receives</text>
+  <text class="w" x="1244" y="994">a fixed-size piece.</text>
+
+  <!-- ───────── cross-chain wires ───────── -->
+  <!-- deposit: TokenHome → ICM → TokenRemote -->
+  <path class="wire" d="M398,626 C444,626 436,348 484,348" marker-end="url(#g)"/>
+  <rect x="404" y="472" width="80" height="22" rx="4" fill="#111113"/>
+  <text class="lbl" x="444" y="488" text-anchor="middle">ICM bridge</text>
+  <!-- withdraw: piece → ICM → C-Chain, or on to another L1 -->
+  <path class="wire" d="M930,690 C1080,690 1100,495 1240,495" marker-end="url(#g)"/>
+  <path class="wireg" d="M930,712 C1080,712 1110,665 1240,665" marker-end="url(#gr)"/>
+  <rect x="1150" y="560" width="80" height="22" rx="4" fill="#111113"/>
+  <text class="lbl" x="1190" y="576" text-anchor="middle">ICM bridge</text>
+  <!-- relayer submits proofs; indexer reads events -->
+  <path class="dash" d="M989,170 L989,296" marker-end="url(#g)"/>
+  <text class="lbl" x="1000" y="216">submits proofs · pays gas</text>
+  <path class="dash" d="M1213,170 C1213,250 1180,330 1160,340" marker-end="url(#g)"/>
+  <text class="lbl" x="1226" y="216">reads events</text>
+</svg>

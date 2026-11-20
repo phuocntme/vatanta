@@ -1,0 +1,37 @@
+{
+  "name": "@vatanta/sdk",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "author": "phuocntme",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./prover": "./src/prover/index.ts",
+    "./circuits/*": "./circuits/*"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "fixtures": "tsx scripts/gen-fixtures.ts"
+  },
+  "dependencies": {
+    "@aztec-foundation/bb.js": "6.0.0",
+    "@noble/ciphers": "2.4.0",
+    "@noble/curves": "2.4.0",
+    "@noble/hashes": "2.4.0",
+    "@noir-lang/noir_js": "1.0.0",
+    "@scure/base": "2.4.0",
+    "@scure/bip32": "2.4.0",
+    "idb-keyval": "6.3.0",
+    "viem": "2.57.13"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0"
+  }
+}

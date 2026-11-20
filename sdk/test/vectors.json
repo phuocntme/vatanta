@@ -1,0 +1,9 @@
+{
+  "comment": "Printed by `nargo test --package vatanta_lib vectors --show-output`",
+  "hash2_3_4": "0x266d452e34d9880b41e076343099570c3743664aeee94312a026102bdb6e8a0b",
+  "hash2_1_2": "0x038682aa1cb5ae4e0a3f13da432a95c77c5c111f6f030faf9cad641ce1ed7383",
+  "owner_42": "0x1fa814db9a154d70a60e405655689d3db54ae3ce3868bbcafb8d0f5fb0e98786",
+  "precommit_owner42_7": "0x0731f7f03e6e9b7a6f9e27dd28c7a65ec6ad8a08927e2295926ffa23c2c2d8b2",
+  "commitment_10usdc_owner42_7": "0x13deff25e5dca54aea5ff7542990590479ca239153be3481b73206e9e1e4499a",
+  "nullifier_above_sk42_idx5": "0x122bfb4b7dbedb2491dacb9ef8f1f2f1802f62561dcf1601c660534ab5525664"
+}

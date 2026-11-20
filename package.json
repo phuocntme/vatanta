@@ -1,0 +1,33 @@
+{
+  "name": "vatanta",
+  "private": true,
+  "license": "MIT",
+  "author": "phuocntme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/phuocntme/vatanta.git"
+  },
+  "homepage": "https://github.com/phuocntme/vatanta#readme",
+  "packageManager": "pnpm@12.5.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
+    "circuits:build": "./circuits/build.sh",
+    "circuits:test": "~/.local/toolchain/nargo/nargo test --workspace --program-dir circuits",
+    "contracts:test": "cd contracts && forge test",
+    "dev:web": "pnpm --filter @vatanta/web dev",
+    "e2e": "pnpm --filter @vatanta/e2e run e2e",
+    "demo": "pnpm --filter @vatanta/e2e run demo",
+    "simulate": "pnpm --filter @vatanta/e2e run simulate",
+    "fuji:smoke": "pnpm --filter @vatanta/e2e run fuji:smoke",
+    "e2e:web": "pnpm --filter @vatanta/e2e run web"
+  },
+  "devDependencies": {
+    "turbo": "2.11.10",
+    "typescript": "6.0.3"
+  }
+}
