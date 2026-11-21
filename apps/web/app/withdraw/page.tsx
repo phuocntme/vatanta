@@ -19,6 +19,7 @@ import { Shell } from "@/components/Shell";
 import { ActionBar } from "@/components/ActionBar";
 import { countdown, everyText, plural, useNextBatch, useSession } from "@/lib/session";
 import { MONO, S, shortHex } from "@/lib/ui";
+import { PageHero } from "@/components/Art";
 
 const MODES: { key: TimingMode; label: string; desc: string; tag: string }[] = [
   { key: "fast", label: "Fast", desc: "All pieces in the next batch", tag: "Weakest" },
@@ -114,7 +115,7 @@ export default function WithdrawPage() {
       const ws = await wallet.prepareWithdrawals({ pieces, batches: chosen, ctx, prover, destination: dest });
       setProgress("Handing pieces to the relayer queue…");
       await relayer.schedule(ws.map((w) => ({ batch: w.batch, proof: w.proof.proof, args: w.args })));
-      setDone(`${plural(ws.length, "piece")} scheduled to ${destName}. Each leaves in its own batch to a fresh address; your wallet updates as they go out.`);
+      setDone(`${plural(ws.length, "piece")} scheduled to ${destName}.`);
       setSeed((x) => x + 1);
       s.bump();
     } catch (e) {
@@ -144,15 +145,15 @@ export default function WithdrawPage() {
           <div style={{ margin: "4px 0 12px" }}>
             <ActionBar active="withdraw" compact />
           </div>
-          <h1 style={S.h1}>Withdraw</h1>
+          <PageHero title="Withdraw" kind="withdraw" />
         </div>
         <div style={S.grid2(420)}>
-          <section aria-labelledby="w-h" style={{ ...S.card, gap: 22 }}>
+          <section aria-labelledby="w-h" className="vt-card" style={{ ...S.card, gap: 22 }}>
             <h2 id="w-h" style={S.h2}>Withdrawal</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               <label htmlFor="w-amt" style={S.label}>Amount (USDC)</label>
               <input id="w-amt" type="text" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} disabled={busy} style={S.input} />
-              <span style={S.hint}>Rounded down to multiples of 10. The rest stays private.</span>
+              <span style={S.hint}>Multiples of 10. The rest stays private.</span>
               {!q.ok && q.error && <span style={{ fontSize: 13, color: "#FF8A93" }}>{q.error}</span>}
             </div>
             {pattern && (
@@ -170,7 +171,7 @@ export default function WithdrawPage() {
                   </option>
                 ))}
               </select>
-              {dest && <span style={S.hint}>Routed through C-Chain automatically. If {dest.name} can&apos;t take it, the piece lands at the same address on C-Chain.</span>}
+              {dest && <span style={S.hint}>Falls back to C-Chain if {dest.name} can&apos;t take it.</span>}
             </div>
             <fieldset style={{ margin: 0, padding: 0, border: 0, display: "flex", flexDirection: "column", gap: 10 }}>
               <legend style={{ fontSize: 14, color: "#A1A1AA", marginBottom: 10 }}>Timing</legend>
@@ -183,13 +184,14 @@ export default function WithdrawPage() {
                     aria-pressed={on}
                     disabled={busy}
                     onClick={() => setMode(m.key)}
-                    style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, minHeight: 60, padding: "0 16px", border: `1px solid ${on ? "#EF3340" : "#29292D"}`, borderRadius: 12, background: on ? "#2A0D12" : "#09090B", color: "#FAFAFA", textAlign: "left", cursor: "pointer" }}
+                    className="vt-ghost"
+                    style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, minHeight: 62, padding: "0 16px", border: `1px solid ${on ? "rgba(239,51,64,0.8)" : "rgba(255,255,255,0.08)"}`, borderRadius: 12, background: on ? "linear-gradient(90deg, rgba(239,51,64,0.18), rgba(239,51,64,0.04))" : "#0B0B0E", boxShadow: on ? "0 0 0 3px rgba(239,51,64,0.10), inset 3px 0 0 #EF3340" : "none", color: "#FAFAFA", textAlign: "left", cursor: "pointer" }}
                   >
                     <span style={{ display: "flex", flexDirection: "column" }}>
                       <span style={{ fontWeight: 600 }}>{m.label}</span>
                       <span style={{ fontSize: 13, color: on ? "#D4D4D8" : "#A1A1AA" }}>{m.desc}</span>
                     </span>
-                    <span style={{ fontSize: 13, color: on ? "#FF8A93" : "#A1A1AA" }}>{m.tag}</span>
+                    <span style={{ fontSize: 13, padding: "2px 10px", borderRadius: 999, border: `1px solid ${on ? "rgba(239,51,64,0.5)" : "rgba(255,255,255,0.1)"}`, color: on ? "#FF8A93" : "#A1A1AA" }}>{m.tag}</span>
                   </button>
                 );
               })}
@@ -208,29 +210,28 @@ export default function WithdrawPage() {
                 <dd style={S.dd}>{formatUsdc(q.net)} USDC</dd>
               </div>
             </dl>
-            <button type="button" onClick={run} disabled={!!wallet && (!q.ok || busy || !ctx)} style={S.cta}>
+            <button type="button" onClick={run} disabled={!!wallet && (!q.ok || busy || !ctx)} className="vt-cta" style={S.cta}>
               {!wallet ? "Unlock to withdraw" : (progress ?? `Schedule ${plural(q.pieces.length, "piece")}`)}
             </button>
-            <span style={{ ...S.hint, marginTop: -10 }}>Preparing the pieces is one private send (0.10 USDC) from your balance.</span>
+            <span style={{ ...S.hint, marginTop: -10 }}>Includes one 0.10 USDC private send.</span>
             {err && <p role="alert" style={S.error}>{err}</p>}
             {done && <p role="status" style={{ ...S.ok, fontSize: 14, margin: 0 }}>{done}</p>}
           </section>
 
-          <section aria-labelledby="plan-h" style={{ background: "#171719", border: "1px solid #29292D", borderRadius: 16, display: "flex", flexDirection: "column", overflow: "hidden" }}>
-            <div style={{ padding: "28px 28px 22px", borderBottom: "1px solid #29292D", display: "flex", flexDirection: "column", gap: 6 }}>
+          <section aria-labelledby="plan-h" className="vt-card" style={{ ...S.card, padding: 0, gap: 0, overflow: "hidden" }}>
+            <div style={{ padding: "28px 28px 22px", borderBottom: "1px solid rgba(255,255,255,0.07)", display: "flex", flexDirection: "column", gap: 6 }}>
               <h2 id="plan-h" style={S.h2}>Withdrawal plan</h2>
-              <p style={{ margin: 0, fontSize: 14, color: "#A1A1AA" }}>Privacy shows how many people could have made each piece: deposits of the same size since yours that haven&apos;t left yet.</p>
             </div>
             <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column" }}>
               {plan.map((p, k) => (
-                <li key={k} style={{ display: "grid", gridTemplateColumns: "92px minmax(0, 1fr) 132px", gap: 14, alignItems: "center", padding: "14px 28px", borderBottom: "1px solid #29292D" }}>
-                  <span style={{ fontFamily: MONO, fontWeight: 500 }}>{(p.d / USDC).toLocaleString("en-US")}</span>
+                <li key={k} className="vt-row" style={{ display: "grid", gridTemplateColumns: "92px minmax(0, 1fr) 132px", gap: 14, alignItems: "center", padding: "14px 28px", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 10, fontFamily: MONO, fontWeight: 500 }}><span aria-hidden="true" style={{ width: 8, height: 8, transform: "rotate(45deg)", border: "1px solid #EF3340", background: "rgba(239,51,64,0.25)" }} />{(p.d / USDC).toLocaleString("en-US")}</span>
                   <span style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
                     <span style={{ fontFamily: MONO, fontSize: 13, color: "#D4D4D8", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>→ fresh {p.addr ? shortHex(p.addr) : "…"}{dest ? ` on ${dest.name}` : ""}</span>
                     <span style={{ fontSize: 12, color: "#A1A1AA" }}>{p.when}</span>
                   </span>
                   <span style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                    <span aria-hidden="true" style={{ display: "block", height: 6, borderRadius: 3, background: "#29292D" }}>
+                    <span aria-hidden="true" style={{ display: "block", height: 6, borderRadius: 3, background: "#222227" }}>
                       <span style={{ display: "block", width: p.level === "green" ? "100%" : p.level === "yellow" ? "50%" : "15%", height: 6, borderRadius: 3, background: p.level === "green" ? "#2FBF71" : p.level === "yellow" ? "#F2B33D" : "#EF3340" }} />
                     </span>
                     <span style={{ fontSize: 12, color: p.level === "green" ? "#6EE7A8" : p.level === "yellow" ? "#F5C66B" : "#FF8A93" }}>{p.level === "red" ? `Only ${p.n} · wait` : `${p.n} could be you`}</span>
@@ -240,7 +241,7 @@ export default function WithdrawPage() {
               {plan.length === 0 && <li style={{ padding: "20px 28px", color: "#A1A1AA", fontSize: 14 }}>Enter an amount to see the pieces.</li>}
             </ul>
             {mine.length > 0 && (
-              <div style={{ borderBottom: "1px solid #29292D" }}>
+              <div style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
                 <div style={{ padding: "16px 28px 6px", fontSize: 13, color: "#A1A1AA" }}>
                   Your scheduled pieces · {plural(queued.length, "piece")} waiting
                 </div>

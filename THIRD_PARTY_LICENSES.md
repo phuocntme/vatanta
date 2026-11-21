@@ -30,7 +30,6 @@ repository retain their respective upstream copyrights and licenses as detailed 
 ### 3. IBM Plex Fonts (`@fontsource` 5.3.0) (SIL OFL 1.1)
 - **Files**:
   - `apps/web/app/fonts/ibm-plex-sans-latin-{400,500,600}-normal.woff2`
-  - `apps/web/app/fonts/ibm-plex-mono-latin-{400,500}-normal.woff2`
   - License file: [`apps/web/app/fonts/OFL.txt`](apps/web/app/fonts/OFL.txt)
 - **Copyright**: `Copyright © 2017 IBM Corp. with Reserved Font Name “Plex”.`
 - **License**: SIL Open Font License, Version 1.1 (verbatim text in `apps/web/app/fonts/OFL.txt`)

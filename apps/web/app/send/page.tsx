@@ -7,6 +7,7 @@ import { ActionBar } from "@/components/ActionBar";
 import { ProofInspector } from "@/components/ProofInspector";
 import { useSession } from "@/lib/session";
 import { MONO, S } from "@/lib/ui";
+import { PageHero } from "@/components/Art";
 
 const LABELS = ["Proof on your device", "Submitted by relayer", "Confirmed on L1"];
 const CTA = ["Generate proof and send", "Generating proof…", "Waiting for block…", "Sent · send another"];
@@ -82,21 +83,22 @@ export default function SendPage() {
           <div style={{ margin: "4px 0 12px" }}>
             <ActionBar active="send" compact />
           </div>
-          <h1 style={S.h1}>Send privately</h1>
+          <PageHero title="Send privately" kind="send" />
         </div>
         <div style={S.grid2(420)}>
-          <form aria-labelledby="send-h" onSubmit={(e) => e.preventDefault()} style={{ ...S.card, margin: 0 }}>
+          <form aria-labelledby="send-h" onSubmit={(e) => e.preventDefault()} className="vt-card" style={{ ...S.card, margin: 0 }}>
             <h2 id="send-h" style={S.h2}>Payment</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               <label htmlFor="to" style={S.label}>Recipient shielded address</label>
               <div style={{ display: "flex", gap: 8 }}>
-                <input id="to" type="text" value={to} onChange={(e) => setTo(e.target.value)} placeholder="zk1…" spellCheck={false} style={{ flex: 1, minWidth: 0, minHeight: 52, boxSizing: "border-box", padding: "0 14px", border: "1px solid #3F3F46", borderRadius: 12, background: "#09090B", color: "#FAFAFA", fontFamily: MONO, fontSize: 14 }} />
+                <input id="to" type="text" value={to} onChange={(e) => setTo(e.target.value)} placeholder="zk1…" spellCheck={false} style={{ flex: 1, minWidth: 0, minHeight: 52, boxSizing: "border-box", padding: "0 14px", border: "1px solid #2E2E34", borderRadius: 12, background: "#08080A", color: "#FAFAFA", fontFamily: MONO, fontSize: 14 }} />
                 <button
                   type="button"
                   aria-label="Paste address"
                   title="Paste from clipboard"
                   onClick={async () => setTo((await navigator.clipboard.readText()).trim())}
-                  style={{ minWidth: 52, minHeight: 52, border: "1px solid #3F3F46", borderRadius: 12, background: "#232326", color: "#FAFAFA", cursor: "pointer" }}
+                  className="vt-ghost"
+                  style={{ minWidth: 52, minHeight: 52, border: "1px solid #34343B", borderRadius: 12, background: "#18181C", color: "#FAFAFA", cursor: "pointer" }}
                 >
                   <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M4 12h16" />
@@ -109,8 +111,7 @@ export default function SendPage() {
               <label htmlFor="amt" style={S.label}>Amount (USDC)</label>
               <input id="amt" type="text" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} style={S.input} />
               <span style={S.hint}>
-                Any amount works inside the pool. It is never shown on-chain.
-                {wallet && ` Available: ${formatUsdc(balance)} USDC.`}
+                {wallet ? `Available: ${formatUsdc(balance)} USDC` : "Never shown on-chain"}
               </span>
               {wallet && amt > 0n && !enough && <span style={{ fontSize: 13, color: "#FF8A93" }}>Not enough private balance (amount + 0.10 fee).</span>}
             </div>
@@ -124,14 +125,14 @@ export default function SendPage() {
                 <dd style={{ margin: 0 }}>Private balance · no gas</dd>
               </div>
             </dl>
-            <button type="button" onClick={send} disabled={!!wallet && ((step === 0 && (!valid || !enough || !ctx)) || step === 1 || step === 2)} style={S.cta}>
+            <button type="button" onClick={send} disabled={!!wallet && ((step === 0 && (!valid || !enough || !ctx)) || step === 1 || step === 2)} className="vt-cta" style={S.cta}>
               {!wallet ? "Unlock to send" : step === 1 && last === null && note ? note : CTA[step]}
             </button>
             {err && <p role="alert" style={S.error}>{err}</p>}
-            <ol aria-label="Progress" style={{ margin: 0, padding: 0, listStyle: "none", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 8 }}>
+            <ol aria-label="Progress" style={{ margin: 0, padding: 14, listStyle: "none", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 12, borderRadius: 12, background: "rgba(8,8,10,0.6)", border: "1px solid rgba(255,255,255,0.06)" }}>
               {LABELS.map((l, i) => (
                 <li key={l} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                  <span aria-hidden="true" style={{ display: "block", height: 4, borderRadius: 2, background: stepsDone > i ? "#EF3340" : "#29292D" }} />
+                  <span aria-hidden="true" style={{ display: "block", height: 4, borderRadius: 2, background: stepsDone > i ? "linear-gradient(90deg, #B81E2D, #EF3340)" : "#26262B", boxShadow: stepsDone > i ? "0 0 12px rgba(239,51,64,0.6)" : "none" }} />
                   <span style={{ fontSize: 13, color: "#D4D4D8" }}>{l}</span>
                   <span style={{ fontSize: 12, color: "#A1A1AA" }}>{step === 3 ? "Done" : status(i)}</span>
                 </li>

@@ -118,8 +118,8 @@ export function UnlockDialog({ loading }: { loading: boolean }) {
   const signedIn = auth.authenticated && !!auth.address;
 
   return (
-    <div onClick={(e) => e.target === e.currentTarget && close()} style={{ position: "fixed", inset: 0, zIndex: 50, background: "rgba(6,6,7,0.78)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, overflowY: "auto" }}>
-      <section ref={box} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby="unlock-h" style={{ boxSizing: "border-box", width: "100%", maxWidth: 480, padding: "clamp(24px, 6vw, 32px)", borderRadius: 24, background: C.panel, border: `1px solid ${C.line}`, boxShadow: "0 24px 80px rgba(0,0,0,0.6)", color: C.text, outline: "none", display: "flex", flexDirection: "column", gap: 20 }}>
+    <div onClick={(e) => e.target === e.currentTarget && close()} style={{ position: "fixed", inset: 0, zIndex: 50, background: "rgba(6,6,7,0.72)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, overflowY: "auto" }}>
+      <section ref={box} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby="unlock-h" style={{ boxSizing: "border-box", width: "100%", maxWidth: 480, padding: "clamp(24px, 6vw, 32px)", borderRadius: 24, background: "radial-gradient(80% 50% at 50% 0%, rgba(239,51,64,0.14), transparent 70%), linear-gradient(180deg, #141418, #0F0F12)", border: "1px solid rgba(255,255,255,0.09)", boxShadow: "0 0 0 1px rgba(0,0,0,0.4), 0 40px 100px -20px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.06)", color: C.text, outline: "none", display: "flex", flexDirection: "column", gap: 20 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             <h2 id="unlock-h" style={{ margin: 0, fontSize: 26, fontWeight: 600, lineHeight: 1.2, letterSpacing: "-0.01em" }}>Unlock private balance</h2>

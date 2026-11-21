@@ -34,7 +34,7 @@ Step by step: `docs/fuji-local.md`. Moving to a VPS: `docs/deploy-vps.md`.
 Split: send all 0.5 AVAX to the deployer's C-Chain address; keep ≈ 0.1 on C-Chain (deploys, relayer
 0.02, ICM relayer 0.02), move ≈ 0.4 to P-Chain (validator fee). 0.4 AVAX ≈ 9 days of L1 uptime in total:
 test for a day, let the validator go inactive (the L1 pauses, state is kept), then top up a few days
-before judging. Each extra validator doubles the daily cost, so the demo runs 1 validator.
+when needed. Each extra validator doubles the daily cost, so the demo runs 1 validator.
 
 ## Validator plan
 

@@ -4,6 +4,7 @@ import { formatUsdc, USDC } from "@vatanta/sdk";
 import { Shell } from "@/components/Shell";
 import { countdown, everyText, useNextBatch, useSession } from "@/lib/session";
 import { MONO, S, shortHex } from "@/lib/ui";
+import { Eyebrow, PageHero } from "@/components/Art";
 
 interface Stats {
   bridgeUsdc: string;
@@ -20,8 +21,9 @@ interface Stats {
   network: string;
 }
 
-const tile = { background: "#171719", border: "1px solid #29292D", borderRadius: 16, padding: 22, display: "flex", flexDirection: "column", gap: 6 } as const;
+const tile = { position: "relative", overflow: "hidden", background: "linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.01) 100%), #111114", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 22, display: "flex", flexDirection: "column", gap: 8, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)" } as const;
 const big = { fontFamily: MONO, fontSize: 28, fontWeight: 500 } as const;
+const lab = { fontSize: 13 } as const;
 
 export default function VerifyPage() {
   const { config, info } = useSession();
@@ -67,57 +69,52 @@ export default function VerifyPage() {
     <Shell active="verify" requireWallet={false}>
       <main style={S.main}>
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          <span style={S.eyebrow}>PUBLIC · NO LOGIN NEEDED</span>
-          <h1 style={S.h1}>Verify the pool</h1>
-          <p style={S.lead}>Anyone can see the assets the bridge holds and how large the crowd is for each amount.</p>
+          <PageHero title="Verify the pool" kind="verify" eyebrow={<Eyebrow>PUBLIC · NO LOGIN NEEDED</Eyebrow>} />
         </div>
         {err && <p role="alert" style={S.error}>{err}</p>}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))", gap: 16 }}>
           <div style={{ ...tile, ...S.softGlow }}>
-            <span style={{ fontSize: 13, color: "#D4D4D8" }}>USDC held by the bridge</span>
+            <span style={{ ...lab, color: "#D4D4D8" }}>USDC held by the bridge</span>
             <span style={big}>{st ? formatUsdc(BigInt(st.bridgeUsdc)) : "—"}</span>
             <span style={{ fontSize: 12, color: "#A1A1AA" }}>ICTT TokenHome on {config?.network === "fuji" ? "Fuji" : "local"} C-Chain{st ? ` · pool holds ${formatUsdc(BigInt(st.poolUsdc))}` : ""}</span>
           </div>
           <div style={tile}>
-            <span style={{ fontSize: 13, color: "#A1A1AA" }}>Notes in the pool</span>
+            <span style={{ ...lab, color: "#A1A1AA" }}>Notes in the pool</span>
             <span style={big}>{st ? st.notes.toLocaleString("en-US") : "—"}</span>
             <span style={{ fontSize: 12, color: "#A1A1AA" }}>Merkle root {st ? shortHex(st.root) : "—"}</span>
           </div>
           <div style={tile}>
-            <span style={{ fontSize: 13, color: "#A1A1AA" }}>Next batch</span>
+            <span style={{ ...lab, color: "#A1A1AA" }}>Next batch</span>
             <span style={big}>{countdown(next)}</span>
             <span style={{ fontSize: 12, color: "#A1A1AA" }}>{everyText(interval)}</span>
           </div>
           <div style={tile}>
-            <span style={{ fontSize: 13, color: "#A1A1AA" }}>Validators online</span>
+            <span style={{ ...lab, color: "#A1A1AA" }}>Validators online</span>
             <span style={big}>{st?.validators.total ? `${st.validators.online} / ${st.validators.total}` : "—"}</span>
             <span style={{ fontSize: 12, color: "#A1A1AA" }}>Open to new stakers</span>
           </div>
         </div>
         <div style={S.grid2(460)}>
-          <section aria-labelledby="anon-h" style={{ ...S.card, gap: 18 }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-              <h2 id="anon-h" style={S.h2}>Crowd size by amount</h2>
-              <p style={{ margin: 0, fontSize: 14, color: "#A1A1AA" }}>Unspent deposits of each size. Bigger crowd, stronger privacy.</p>
-            </div>
+          <section aria-labelledby="anon-h" className="vt-card" style={{ ...S.card, gap: 18 }}>
+            <h2 id="anon-h" style={S.h2}>Crowd size by amount</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               {(st?.crowd ?? []).map((c) => (
                 <div key={c.denomination} style={{ display: "grid", gridTemplateColumns: "72px minmax(0, 1fr) 48px", gap: 12, alignItems: "center" }}>
                   <span style={{ fontFamily: MONO }}>{(BigInt(c.denomination) / USDC).toLocaleString("en-US")}</span>
-                  <span aria-hidden="true" style={{ display: "block", height: 12, borderRadius: 6, background: "#232326" }}>
-                    <span style={{ display: "block", width: `${Math.max(2, (c.crowd / maxCrowd) * 100)}%`, height: 12, borderRadius: 6, background: "#EF3340" }} />
+                  <span aria-hidden="true" style={{ display: "block", height: 10, borderRadius: 5, background: "repeating-linear-gradient(90deg, #1C1C21 0 6px, #17171B 6px 8px)" }}>
+                    <span style={{ display: "block", width: `${Math.max(2, (c.crowd / maxCrowd) * 100)}%`, height: 10, borderRadius: 5, background: "linear-gradient(90deg, #8F1725, #EF3340)", boxShadow: "0 0 14px rgba(239,51,64,0.45)" }} />
                   </span>
                   <span style={{ fontFamily: MONO, textAlign: "right" }}>{c.crowd}</span>
                 </div>
               ))}
             </div>
-            <p style={{ margin: 0, fontSize: 13, color: "#A1A1AA" }}>Testnet figures include simulated traffic.</p>
+            <p style={{ margin: 0, fontSize: 13, color: "#A1A1AA" }}>Includes simulated traffic.</p>
           </section>
-          <section aria-labelledby="cx-h" style={{ ...S.card, gap: 14 }}>
+          <section aria-labelledby="cx-h" className="vt-card" style={{ ...S.card, gap: 14 }}>
             <h2 id="cx-h" style={S.h2}>Contracts</h2>
             <dl style={{ margin: 0, display: "flex", flexDirection: "column" }}>
               {contracts.map((c) => (
-                <div key={c.k} style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: 8, padding: "12px 0", borderTop: "1px solid #29292D" }}>
+                <div key={c.k} style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: 8, padding: "12px 0", borderTop: "1px solid rgba(255,255,255,0.07)" }}>
                   <dt>
                     {c.k} <span style={{ color: "#A1A1AA", fontSize: 13 }}>· {c.where}</span>
                   </dt>
@@ -131,14 +128,14 @@ export default function VerifyPage() {
         </div>
         <section aria-labelledby="b-h" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           <h2 id="b-h" style={{ margin: 0, fontSize: 18, fontWeight: 600 }}>Recent batches</h2>
-          <div style={{ overflowX: "auto", background: "#171719", border: "1px solid #29292D", borderRadius: 16 }}>
+          <div style={S.table}>
             <table style={{ width: "100%", minWidth: 680, borderCollapse: "collapse", fontSize: 14 }}>
               <thead>
-                <tr style={{ textAlign: "left", color: "#A1A1AA", fontSize: 12, letterSpacing: "0.08em" }}>
+                <tr style={{ textAlign: "left" }}>
                   {["BATCH", "TIME", "PRIVATE TXS", "WITHDRAWALS"].map((h, i) => (
-                    <th key={h} scope="col" style={{ padding: i === 0 ? "14px 24px" : "14px 16px", fontWeight: 500, borderBottom: "1px solid #29292D" }}>{h}</th>
+                    <th key={h} scope="col" style={{ ...S.th, padding: i === 0 ? "14px 24px" : "14px 16px" }}>{h}</th>
                   ))}
-                  <th scope="col" style={{ padding: "14px 24px", fontWeight: 500, borderBottom: "1px solid #29292D", textAlign: "right" }}>C-CHAIN TX</th>
+                  <th scope="col" style={{ ...S.th, padding: "14px 24px", textAlign: "right" }}>C-CHAIN TX</th>
                 </tr>
               </thead>
               <tbody>
@@ -148,9 +145,9 @@ export default function VerifyPage() {
                   </tr>
                 )}
                 {(st?.batches ?? []).map((b, i, arr) => {
-                  const bd = i === arr.length - 1 ? undefined : "1px solid #29292D";
+                  const bd = i === arr.length - 1 ? undefined : "1px solid rgba(255,255,255,0.07)";
                   return (
-                    <tr key={b.batch}>
+                    <tr key={b.batch} className="vt-row">
                       <td style={{ padding: "14px 24px", borderBottom: bd, fontFamily: MONO }}>#{b.batch}</td>
                       <td style={{ padding: "14px 16px", borderBottom: bd, color: "#D4D4D8" }}>{new Date(b.time * 1000).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}</td>
                       <td style={{ padding: "14px 16px", borderBottom: bd, fontFamily: MONO }}>{b.privateTxs}</td>
@@ -176,21 +173,21 @@ export default function VerifyPage() {
         {byDest.size > 0 && (
           <section aria-labelledby="d-h" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             <h2 id="d-h" style={{ margin: 0, fontSize: 18, fontWeight: 600 }}>Withdrawals by destination</h2>
-            <div style={{ overflowX: "auto", background: "#171719", border: "1px solid #29292D", borderRadius: 16 }}>
+            <div style={S.table}>
               <table style={{ width: "100%", minWidth: 560, borderCollapse: "collapse", fontSize: 14 }}>
                 <thead>
-                  <tr style={{ textAlign: "left", color: "#A1A1AA", fontSize: 12, letterSpacing: "0.08em" }}>
-                    <th scope="col" style={{ padding: "14px 24px", fontWeight: 500, borderBottom: "1px solid #29292D" }}>CHAIN</th>
+                  <tr style={{ textAlign: "left" }}>
+                    <th scope="col" style={{ ...S.th, padding: "14px 24px" }}>CHAIN</th>
                     {DENOMS.map((d) => (
-                      <th key={d.toString()} scope="col" style={{ padding: "14px 16px", fontWeight: 500, borderBottom: "1px solid #29292D", textAlign: "right" }}>{(d / USDC).toLocaleString("en-US")} USDC</th>
+                      <th key={d.toString()} scope="col" style={{ ...S.th, padding: "14px 16px", textAlign: "right" }}>{(d / USDC).toLocaleString("en-US")} USDC</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {[...byDest.entries()].map(([id, m], i, arr) => {
-                    const bd = i === arr.length - 1 ? undefined : "1px solid #29292D";
+                    const bd = i === arr.length - 1 ? undefined : "1px solid rgba(255,255,255,0.07)";
                     return (
-                      <tr key={id}>
+                      <tr key={id} className="vt-row">
                         <td style={{ padding: "14px 24px", borderBottom: bd }}>{destName(id)}</td>
                         {DENOMS.map((d) => (
                           <td key={d.toString()} style={{ padding: "14px 16px", borderBottom: bd, fontFamily: MONO, textAlign: "right" }}>{m.get(d.toString()) ?? 0}</td>

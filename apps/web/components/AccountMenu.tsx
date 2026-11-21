@@ -91,8 +91,8 @@ function ProfileDialog({ onClose }: { onClose: () => void }) {
   );
 
   return (
-    <div onClick={(e) => e.target === e.currentTarget && onClose()} style={{ position: "fixed", inset: 0, zIndex: 50, background: "rgba(6,6,7,0.78)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
-      <section role="dialog" aria-modal="true" aria-labelledby="profile-h" style={{ boxSizing: "border-box", width: "100%", maxWidth: 440, padding: "clamp(24px, 6vw, 32px)", borderRadius: 24, background: C.panel, border: `1px solid ${C.line}`, boxShadow: "0 24px 80px rgba(0,0,0,0.6)", color: C.text, display: "flex", flexDirection: "column" }}>
+    <div onClick={(e) => e.target === e.currentTarget && onClose()} style={{ position: "fixed", inset: 0, zIndex: 50, background: "rgba(6,6,7,0.72)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
+      <section role="dialog" aria-modal="true" aria-labelledby="profile-h" style={{ boxSizing: "border-box", width: "100%", maxWidth: 440, padding: "clamp(24px, 6vw, 32px)", borderRadius: 24, background: "radial-gradient(80% 50% at 50% 0%, rgba(239,51,64,0.14), transparent 70%), linear-gradient(180deg, #141418, #0F0F12)", border: "1px solid rgba(255,255,255,0.09)", boxShadow: "0 0 0 1px rgba(0,0,0,0.4), 0 40px 100px -20px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.06)", color: C.text, display: "flex", flexDirection: "column" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, marginBottom: 16 }}>
           <h2 id="profile-h" style={{ margin: 0, fontSize: 24, fontWeight: 600, lineHeight: 1.2 }}>Profile</h2>
           <button type="button" onClick={onClose} aria-label="Close" style={{ flex: "none", width: 32, height: 32, margin: "-4px -6px 0 0", border: 0, borderRadius: 8, background: "transparent", color: C.muted, display: "grid", placeItems: "center", cursor: "pointer" }}>

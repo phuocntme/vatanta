@@ -3,6 +3,7 @@ import { useState } from "react";
 import type { ProofResult } from "@vatanta/sdk";
 import { useSession } from "@/lib/session";
 import { MONO, S, shortHex } from "@/lib/ui";
+import { Eyebrow } from "./Art";
 
 const NAMES: Record<string, string[]> = {
   transfer: ["root", "nullifier[0]", "nullifier[1]", "out_commitment[0]", "out_commitment[1]", "fee", "relayer", "chain_id", "pool", "ext_data_hash"],
@@ -26,24 +27,24 @@ export function ProofInspector({ proof, tx }: { proof: ProofResult | null; tx?: 
   };
   const names = proof ? NAMES[proof.circuit] ?? [] : [];
   const stat = (label: string, value: string) => (
-    <div style={{ display: "flex", flexDirection: "column", gap: 4, padding: "14px 16px", background: "#09090B", border: "1px solid #29292D", borderRadius: 12 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 4, padding: "14px 16px", background: "linear-gradient(180deg, rgba(255,255,255,0.02), transparent), #0A0A0D", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, boxShadow: "inset 2px 0 0 rgba(239,51,64,0.7)" }}>
       <span style={{ fontSize: 12, color: "#A1A1AA" }}>{label}</span>
       <span style={{ fontFamily: MONO, fontSize: 18, fontWeight: 500 }}>{value}</span>
     </div>
   );
   return (
-    <section aria-labelledby="pi-h" style={{ ...S.card, gap: 18 }}>
+    <section aria-labelledby="pi-h" className="vt-card" style={{ ...S.card, gap: 18 }}>
       <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-          <span style={S.eyebrow}>ZERO-KNOWLEDGE</span>
+          <Eyebrow>ZERO-KNOWLEDGE</Eyebrow>
           <h2 id="pi-h" style={{ ...S.h2, fontSize: 18 }}>Proof inspector</h2>
         </div>
-        <button type="button" onClick={verify} disabled={!proof || verdict === "checking"} style={S.ghost}>
+        <button type="button" onClick={verify} disabled={!proof || verdict === "checking"} className="vt-ghost" style={S.ghost}>
           {verdict === "checking" ? "Verifying…" : "Verify locally"}
         </button>
       </div>
       {!proof ? (
-        <p style={{ margin: 0, color: "#A1A1AA", fontSize: 14 }}>Send a payment to see the proof your device generated: the circuit, its size, how long it took, and every public input the L1 checks.</p>
+        <p style={{ margin: 0, color: "#A1A1AA", fontSize: 14 }}>No proof yet.</p>
       ) : (
         <>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(170px, 100%), 1fr))", gap: 12 }}>
@@ -73,7 +74,7 @@ export function ProofInspector({ proof, tx }: { proof: ProofResult | null; tx?: 
             )}
           </div>
           <p style={{ margin: 0, fontSize: 13, color: "#A1A1AA" }}>
-            Witness built in {proof.witnessMs} ms. Chain id, pool address, relayer and fee are public inputs, so the proof cannot be replayed elsewhere or redirected.
+            Witness built in {proof.witnessMs} ms.
             {tx ? ` L1 transaction ${shortHex(tx, 10, 6)}.` : ""}
           </p>
         </>

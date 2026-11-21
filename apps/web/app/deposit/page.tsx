@@ -8,6 +8,7 @@ import { ActionBar } from "@/components/ActionBar";
 import { QR } from "@/components/QR";
 import { useSession } from "@/lib/session";
 import { MONO, S, shortHex } from "@/lib/ui";
+import { Corners, PageHero } from "@/components/Art";
 
 interface Active {
   address: Address;
@@ -214,22 +215,26 @@ export default function DepositPage() {
           <div style={{ margin: "4px 0 12px" }}>
             <ActionBar active="deposit" compact />
           </div>
-          <h1 style={S.h1}>Deposit</h1>
+          <PageHero title="Deposit" kind="deposit" />
         </div>
         <div style={S.grid2(460)}>
-          <section aria-labelledby="src-h" style={S.card}>
+          <section aria-labelledby="src-h" className="vt-card" style={S.card}>
             <h2 id="src-h" style={S.h2}>Send USDC to your deposit address</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <p style={{ margin: 0, color: "#D4D4D8" }}>Withdraw USDC from your exchange to this one-time address. It has no history, so nothing links the deposit to your main wallet.</p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 20, alignItems: "center" }}>
-                {shownAddr && <QR value={shownAddr} size={132} label="QR code of the one-time deposit address" />}
+                {shownAddr && (
+                  <span style={{ position: "relative", padding: 8, borderRadius: 16, background: "rgba(8,8,10,0.6)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                    <Corners color="rgba(239,51,64,0.8)" size={12} inset={-1} />
+                    <QR value={shownAddr} size={132} label="QR code of the one-time deposit address" />
+                  </span>
+                )}
                 <div style={{ display: "flex", flexDirection: "column", gap: 10, flex: "1 1 220px", minWidth: 0 }}>
                   <span style={S.hint}>One-time deposit address · {config?.network === "fuji" ? "Fuji" : "Local"} C-Chain</span>
-                  <code style={{ fontFamily: MONO, fontSize: 14, wordBreak: "break-all", padding: "12px 14px", background: "#09090B", border: "1px solid #29292D", borderRadius: 10 }}>{shownAddr}</code>
-                  <button type="button" onClick={copy} style={{ ...S.ghost, alignSelf: "flex-start" }}>{copied ? "Copied" : "Copy address"}</button>
+                  <code style={{ fontFamily: MONO, fontSize: 14, wordBreak: "break-all", padding: "12px 14px", background: "#08080A", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.03)" }}>{shownAddr}</code>
+                  <button type="button" onClick={copy} className="vt-ghost" style={{ ...S.ghost, alignSelf: "flex-start" }}>{copied ? "Copied" : "Copy address"}</button>
                 </div>
               </div>
-              <p style={{ ...S.hint, margin: 0 }}>No AVAX needed. When USDC arrives, our relayer moves it into the pool for you.{!active ? " Enter the amount and confirm to activate this address." : ""}</p>
+              <p style={{ ...S.hint, margin: 0 }}>No AVAX needed. The relayer moves it into the pool.</p>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               <label htmlFor="dep-amt" style={S.label}>Amount (USDC)</label>
@@ -247,12 +252,11 @@ export default function DepositPage() {
             </div>
           </section>
 
-          <section aria-labelledby="sum-h" style={S.card}>
+          <section aria-labelledby="sum-h" className="vt-card" style={S.card}>
             <h2 id="sum-h" style={S.h2}>How it lands on C-Chain</h2>
-            <p style={{ margin: 0, fontSize: 14, color: "#A1A1AA" }}>Your amount becomes standard notes. Everyone deposits the same sizes, so yours blends in.</p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
               {pieces.map((p) => (
-                <span key={p.denomination.toString()} style={{ display: "inline-flex", alignItems: "baseline", gap: 6, padding: "8px 14px", borderRadius: 10, background: "#232326", border: "1px solid #3F3F46", fontFamily: MONO, fontSize: 14 }}>
+                <span key={p.denomination.toString()} style={{ display: "inline-flex", alignItems: "baseline", gap: 6, padding: "8px 14px", borderRadius: 10, background: "linear-gradient(180deg, #1F1F24, #16161A)", border: "1px solid rgba(255,255,255,0.10)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05), inset 3px 0 0 #EF3340", fontFamily: MONO, fontSize: 14, color: "#A1A1AA" }}>
                   {p.count} × <strong style={{ fontWeight: 500, color: "#FAFAFA" }}>{(p.denomination / USDC).toLocaleString("en-US")}</strong>
                 </span>
               ))}
@@ -271,11 +275,11 @@ export default function DepositPage() {
                 <dd style={S.dd}>{formatUsdc(q.net)} USDC</dd>
               </div>
             </dl>
-            <div style={{ padding: "14px 16px", borderRadius: 12, border: "1px solid #3F3F46", background: "#09090B", fontSize: 14, color: "#D4D4D8" }}>
-              <strong style={{ fontWeight: 600, color: "#FAFAFA" }}>Public on C-Chain:</strong> the sending address and each fixed amount. Everything after this step is private.
+            <div style={{ padding: "14px 16px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)", borderLeft: "2px solid #EF3340", background: "rgba(8,8,10,0.7)", fontSize: 14, color: "#D4D4D8" }}>
+              <strong style={{ fontWeight: 600, color: "#FAFAFA" }}>Public on C-Chain:</strong> sender and amounts. Private after this.
             </div>
             {!active || active.status === "done" ? (
-              <button type="button" onClick={start} disabled={!!wallet && (!canDeposit || busy || !info)} style={S.cta}>
+              <button type="button" onClick={start} disabled={!!wallet && (!canDeposit || busy || !info)} className="vt-cta" style={S.cta}>
                 {!wallet ? "Unlock to deposit" : busy ? "Signing…" : canDeposit ? `Deposit ${(q.gross / USDC).toLocaleString("en-US")} USDC` : odd ? "Enter a multiple of 10 USDC" : "Enter at least 20 USDC"}
               </button>
             ) : (
@@ -298,7 +302,7 @@ export default function DepositPage() {
                   </p>
                 )}
                 {(active.status === "failed" || active.status === "expired") && (
-                  <button type="button" onClick={retry} disabled={busy} style={{ ...S.cta, minHeight: 48 }}>
+                  <button type="button" onClick={retry} disabled={busy} className="vt-cta" style={{ ...S.cta, minHeight: 48 }}>
                     {busy ? "Signing…" : "Sign again and retry"}
                   </button>
                 )}

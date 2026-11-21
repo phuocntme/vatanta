@@ -13,26 +13,28 @@ const NAV: { key: NavKey; label: string; href: string }[] = [
 ];
 const section = (k: NavKey): NavKey => (k === "verify" ? "verify" : "wallet");
 
-const pill = { display: "inline-flex", alignItems: "center", gap: 8, minHeight: 40, padding: "0 14px", border: "1px solid #29292D", borderRadius: 999, background: "#171719" } as const;
+const pill = { display: "inline-flex", alignItems: "center", gap: 8, minHeight: 38, padding: "0 14px", border: "1px solid rgba(255,255,255,0.09)", borderRadius: 999, background: "rgba(23,23,27,0.8)" } as const;
 
 export function Header({ active }: { active: NavKey }) {
   const { eoa, config, info, requestUnlock } = useSession();
   const net = config?.network === "fuji" ? "Fuji testnet" : config ? "Local network" : "Connecting…";
   return (
-    <header style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 16, padding: "14px 32px", borderBottom: "1px solid #29292D", background: "#09090B", color: "#FAFAFA", fontSize: 15 }}>
+    <header className="vt-header" style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 16, padding: "12px 32px", borderBottom: "1px solid rgba(255,255,255,0.07)", color: "#FAFAFA", fontSize: 15 }}>
       <Link href="/" style={{ display: "flex", alignItems: "center", gap: 12, textDecoration: "none", minHeight: 44 }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/logo.png" alt="" width={36} height={36} style={{ display: "block", borderRadius: 8 }} />
+        <span style={{ position: "relative", display: "block", borderRadius: 10, padding: 1, background: "linear-gradient(140deg, rgba(239,51,64,0.9), rgba(255,255,255,0.08) 60%)", boxShadow: "0 0 24px -6px rgba(239,51,64,0.6)" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="" width={34} height={34} style={{ display: "block", borderRadius: 9 }} />
+        </span>
         <span style={{ fontWeight: 600, fontSize: 17 }}>{BRAND}</span>
       </Link>
-      <nav aria-label="Main" style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+      <nav aria-label="Main" className="vt-nav" style={{ display: "flex", flexWrap: "wrap", gap: 2, padding: 4, borderRadius: 12, border: "1px solid rgba(255,255,255,0.07)", background: "rgba(17,17,20,0.7)" }}>
         {NAV.map((n) =>
           n.key === section(active) ? (
-            <Link key={n.key} href={n.href} aria-current="page" style={{ display: "inline-flex", alignItems: "center", minHeight: 44, padding: "0 14px", textDecoration: "none", fontWeight: 600, color: "#FAFAFA", boxShadow: "inset 0 -2px 0 #EF3340" }}>
+            <Link key={n.key} href={n.href} aria-current="page" style={{ position: "relative", display: "inline-flex", alignItems: "center", minHeight: 36, padding: "0 16px", borderRadius: 8, textDecoration: "none", fontWeight: 600, color: "#FAFAFA", background: "linear-gradient(180deg, #232328, #1A1A1E)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -2px 0 #EF3340" }}>
               {n.label}
             </Link>
           ) : (
-            <Link key={n.key} href={n.href} style={{ display: "inline-flex", alignItems: "center", minHeight: 44, padding: "0 14px", textDecoration: "none", color: "#A1A1AA" }}>
+            <Link key={n.key} href={n.href} style={{ display: "inline-flex", alignItems: "center", minHeight: 36, padding: "0 16px", borderRadius: 8, textDecoration: "none", color: "#A1A1AA" }}>
               {n.label}
             </Link>
           ),
@@ -40,16 +42,39 @@ export function Header({ active }: { active: NavKey }) {
       </nav>
       <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8, fontSize: 13 }}>
         <span style={pill} title={info ? `Relayer ${info.relayer}` : "Relayer unreachable"}>
-          <span aria-hidden="true" style={{ width: 8, height: 8, borderRadius: "50%", background: info ? "#2FBF71" : "#F2B33D" }} />
+          <span aria-hidden="true" className={info ? "vt-live" : undefined} style={{ width: 7, height: 7, borderRadius: "50%", background: info ? "#2FBF71" : "#F2B33D", boxShadow: info ? "0 0 8px #2FBF71" : "none" }} />
           {net}
         </span>
         {!eoa && (
-          <button type="button" onClick={requestUnlock} disabled={!config} style={{ ...pill, color: "#FAFAFA", fontWeight: 600, cursor: "pointer", borderColor: "#8F1725" }}>
+          <button type="button" className="vt-cta" onClick={requestUnlock} disabled={!config} style={{ ...pill, border: 0, color: "#09090B", fontWeight: 600, cursor: "pointer", background: "linear-gradient(180deg, #F2434F 0%, #E02A38 100%)", boxShadow: "0 6px 20px -8px rgba(239,51,64,0.7), inset 0 1px 0 rgba(255,255,255,0.3)" }}>
             Connect wallet
           </button>
         )}
         <AccountMenu />
       </div>
     </header>
+  );
+}
+
+export function Footer() {
+  const { config, info } = useSession();
+  const net = config?.network === "fuji" ? "Fuji testnet" : config ? "Local network" : "Connecting…";
+  return (
+    <footer style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(9,9,11,0.6)" }}>
+      <div style={{ maxWidth: 1120, margin: "0 auto", padding: "20px 32px", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "10px 24px", fontSize: 13, color: "#71717A" }}>
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
+          <span aria-hidden="true" style={{ width: 6, height: 6, borderRadius: 1, background: "#EF3340" }} />
+          {BRAND}
+        </span>
+        <span style={{ display: "inline-flex", flexWrap: "wrap", alignItems: "center", gap: "6px 18px" }}>
+          <span>
+            {net} · Relayer <span style={{ color: info ? "#6EE7A8" : "#F5C66B" }}>{info ? "online" : "offline"}</span>
+          </span>
+          <Link href="/verify" style={{ color: "#A1A1AA", textDecoration: "none" }}>
+            Verify the pool ↗
+          </Link>
+        </span>
+      </div>
+    </footer>
   );
 }

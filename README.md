@@ -222,7 +222,7 @@ are 7.6–8 KB and take ~0.1–0.2 s natively (a few seconds in the browser).
 ## Quick start (local network)
 
 Prerequisites: Foundry, Rust, Node 24 + pnpm, Postgres running locally, and the pinned binaries
-in `~/.local/toolchain` (nargo 1.0.0, bb 6.0.0, avalanche-cli 1.9.7 — see CLAUDE.md).
+in `~/.local/toolchain` (nargo 1.0.0, bb 6.0.0, avalanche-cli 1.9.7 — see SPEC.md §10).
 
 ```sh
 pnpm install
@@ -310,5 +310,5 @@ Maintained by [phuocntme](https://github.com/phuocntme).
 
 ## Repository
 
-See `CLAUDE.md` for commands and layout, `SPEC.md` for every design decision and the day-1 risk
-spike results (UltraHonk on Subnet-EVM, ICTT `sendAndCall`).
+See `SPEC.md` for the repo layout (§12), pinned toolchain versions (§10), every design decision,
+and the day-1 risk spike results (UltraHonk on Subnet-EVM, ICTT `sendAndCall`).
